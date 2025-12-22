@@ -2,7 +2,7 @@
 
 #include <string>
 
-enum dateRange
+enum DateRange
 {
     DAILY,
     MONTHLY,
@@ -14,7 +14,8 @@ class CandleStickEntry
 {
     public:
         CandleStickEntry(std::string _date, double _open, double _high, double _low, double _close);
-        std::string getDate(dateRange dateRange);
+        std::string getDate(DateRange dateRange);
+        void print();
     
     private:
         std::string date;

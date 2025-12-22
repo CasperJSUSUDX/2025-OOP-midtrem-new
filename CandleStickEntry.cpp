@@ -1,5 +1,6 @@
 #include "CandleStickEntry.h"
 #include "CSVReader.h"
+#include <iostream>
 #include <vector>
 
 CandleStickEntry::CandleStickEntry(
@@ -17,16 +18,25 @@ CandleStickEntry::CandleStickEntry(
 
 }
 
-std::string CandleStickEntry::getDate(dateRange dateRange)
+void CandleStickEntry::print()
+{
+    std::cout << "Date: " << date << std::endl;
+    std::cout << "Open: " << date << std::endl;
+    std::cout << "High: " << date << std::endl;
+    std::cout << "Low: " << date << std::endl;
+    std::cout << "Close: " << date << std::endl;
+}
+
+std::string CandleStickEntry::getDate(DateRange dateRange)
 {
     std::vector<std::string> dates = CSVReader::tokenise(date, '/');
     switch (dateRange)
     {
-    case dateRange::YEARLY:
+    case DateRange::YEARLY:
         return dates[0];
-    case dateRange::MONTHLY:
+    case DateRange::MONTHLY:
         return dates[0] + '/' + dates[1];
-    case dateRange::DAILY:
+    case DateRange::DAILY:
         return dates[0] + '/' + dates[1] + '/' + dates[2];
     default:
         return dates[0];
