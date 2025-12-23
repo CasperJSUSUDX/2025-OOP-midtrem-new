@@ -21,10 +21,10 @@ CandleStickEntry::CandleStickEntry(
 void CandleStickEntry::print()
 {
     std::cout << "Date: " << date << std::endl;
-    std::cout << "Open: " << date << std::endl;
-    std::cout << "High: " << date << std::endl;
-    std::cout << "Low: " << date << std::endl;
-    std::cout << "Close: " << date << std::endl;
+    std::cout << "Open: " << open << std::endl;
+    std::cout << "High: " << high << std::endl;
+    std::cout << "Low: " << low << std::endl;
+    std::cout << "Close: " << close << std::endl;
 }
 
 std::string CandleStickEntry::getDate(DateRange dateRange)
