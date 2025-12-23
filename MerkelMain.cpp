@@ -5,7 +5,8 @@
 #include "CSVReader.h"
 #include "AccountManager.h"
 
-MerkelMain::MerkelMain()
+MerkelMain::MerkelMain(Wallet _wallet)
+: wallet(_wallet)
 {
 
 }
@@ -15,12 +16,17 @@ void MerkelMain::init()
     int input;
     currentTime = orderBook.getEarliestTime();
 
-    AccountManager::login();
-
     while(true)
     {
         printMenu();
         input = getUserOption();
+
+        if (input == 7)
+        {
+            std::cout << "See you next time." << std::endl;
+            break;
+        }
+
         processUserOption(input);
     }
 }
@@ -40,6 +46,8 @@ void MerkelMain::printMenu()
     std::cout << "5: Print wallet " << std::endl;
     // 6 continue   
     std::cout << "6: Continue " << std::endl;
+    // 7 exit
+    std::cout << "7: Exit" << std::endl;
 
     std::cout << "============== " << std::endl;
 
@@ -229,5 +237,5 @@ void MerkelMain::processUserOption(int userOption)
     if (userOption == 6) 
     {
         gotoNextTimeframe();
-    }       
+    }
 }
