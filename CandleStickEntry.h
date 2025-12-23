@@ -16,8 +16,7 @@ class CandleStickEntry
         CandleStickEntry(std::string _date, double _open, double _high, double _low, double _close);
         std::string getDate(DateRange dateRange);
         void print();
-    
-    private:
+
         std::string date;
         double open;
         double high;
