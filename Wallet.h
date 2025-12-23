@@ -27,7 +27,7 @@ class Wallet
         /** generate a string representation of the wallet */
         std::string toString();
         friend std::ostream& operator<<(std::ostream& os, Wallet& wallet);
-
+        /** convert to a format that can store in CSV and read by the code */
         std::string storeInString();
         
     private:

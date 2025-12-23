@@ -4,6 +4,7 @@
 
 Wallet::Wallet(std::string walletString)
 {
+    // convert the data in the string and add to this wallet 
     std::vector<std::string> tokens = CSVReader::tokenise(walletString, '|');
     for (std::string& token: tokens)
     {
