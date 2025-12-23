@@ -8,7 +8,7 @@
 class Wallet 
 {
     public:
-        Wallet(std::string walletString);
+        Wallet(std::string _uuid, std::string walletString);
         /** insert currency to the wallet */
         void insertCurrency(std::string type, double amount);
         /** remove currency from the wallet */
@@ -22,7 +22,8 @@ class Wallet
          * assumes the order was made by the owner of the wallet
         */
         void processSale(OrderBookEntry& sale);
-
+        /** log user transition and the balance */
+        void logInCSV();
 
         /** generate a string representation of the wallet */
         std::string toString();
@@ -31,6 +32,7 @@ class Wallet
         std::string storeInString();
         
     private:
+        std::string uuid;
         std::map<std::string,double> currencies;
 
 };

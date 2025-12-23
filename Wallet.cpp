@@ -2,7 +2,8 @@
 #include <iostream>
 #include "CSVReader.h"
 
-Wallet::Wallet(std::string walletString)
+Wallet::Wallet(std::string _uuid, std::string walletString)
+: uuid(_uuid)
 {
     // convert the data in the string and add to this wallet 
     std::vector<std::string> tokens = CSVReader::tokenise(walletString, '|');
@@ -117,7 +118,12 @@ bool Wallet::canFulfillOrder(OrderBookEntry order)
 
     return false; 
 }
-      
+
+void Wallet::logInCSV()
+{
+
+}
+
 std::string Wallet::toString()
 {
     std::string s;
