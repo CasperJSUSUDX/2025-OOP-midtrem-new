@@ -35,6 +35,9 @@ class OrderBook
 
         std::vector<CandleStickEntry> summaryCandleStick(DateRange dateRange, std::string product, OrderBookType type);
 
+        /** calculate the interval seconds between two time stamp */
+        static unsigned int calcTimeInterval(std::string& timeStamp1, std::string& timeStamp2);
+
     private:
         std::vector<OrderBookEntry> orders;
 

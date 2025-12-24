@@ -3,7 +3,7 @@
 #include <map>
 #include <algorithm>
 #include <iostream>
-
+#include <cmath>
 
 /** construct, reading a csv data file */
 OrderBook::OrderBook(std::string filename)
@@ -106,13 +106,13 @@ std::vector<CandleStickEntry> OrderBook::summaryCandleStick(DateRange dateRange,
         switch (dateRange)
         {
             case DateRange::YEARLY:
-                return timeStamp.substr(0, 4);
+                return timeStamp.substr(11, 14);
             case DateRange::MONTHLY:
-                return timeStamp.substr(0, 7);
+                return timeStamp.substr(11, 16);
             case DateRange::DAILY:
-                return timeStamp.substr(0, 10);
+                return timeStamp.substr(11, 18);
             default:
-                return timeStamp.substr(0, 4);
+                return timeStamp.substr(11, 18);
         }
     };
 
@@ -155,6 +155,25 @@ std::vector<CandleStickEntry> OrderBook::summaryCandleStick(DateRange dateRange,
         candleSticks.push_back(cse);
     }
     return candleSticks;
+}
+
+unsigned int OrderBook::calcTimeInterval(std::string& timeStamp1, std::string& timeStamp2)
+{
+    std::string timeStamp1_p = timeStamp1.substr(11, 8);
+    std::string timeStamp2_p = timeStamp2.substr(11, 8);
+
+    int hour1 = std::stoi(timeStamp1_p.substr(0, 2));
+    int minute1 = std::stoi(timeStamp1_p.substr(3, 2));
+    int second1 = std::stoi(timeStamp1_p.substr(7, 2));
+    int hour2 = std::stoi(timeStamp2_p.substr(0, 2));
+    int minute2 = std::stoi(timeStamp2_p.substr(3, 2));
+    int second2 = std::stoi(timeStamp2_p.substr(7, 2));
+
+    unsigned int hour = std::abs(hour1 - hour2) * 3600;
+    unsigned int minute = std::abs(minute1 - minute2) * 60;
+    unsigned int second = std::abs(second1 - second2);
+
+    return hour + minute + second;
 }
 
 std::vector<OrderBookEntry> OrderBook::matchAsksToBids(std::string product, std::string timestamp)
