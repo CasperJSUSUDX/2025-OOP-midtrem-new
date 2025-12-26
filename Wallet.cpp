@@ -78,36 +78,33 @@ bool Wallet::containsCurrency(std::string type, double amount)
 void Wallet::processSale(OrderBookEntry& sale)
 {
     std::vector<std::string> currs = CSVReader::tokenise(sale.product, '/');
+    double outgoingAmount;
+    std::string outgoingCurrency;
+    double incomingAmount;
+    std::string incomingCurrency;
     // ask
     if (sale.orderType == OrderBookType::asksale)
     {
-        double outgoingAmount = sale.amount;
-        std::string outgoingCurrency = currs[0];
-        double incomingAmount = sale.amount * sale.price;
-        std::string incomingCurrency = currs[1];
-
-        currencies[incomingCurrency] += incomingAmount;
-        currencies[outgoingCurrency] -= outgoingAmount;
-
-        // Add log line in the cache
-        std::string logLine = "trade," + outgoingCurrency + "," + std::to_string(outgoingAmount) + "," + incomingCurrency + "," + std::to_string(incomingAmount);
-        operatesCache.push_back(logLine);
+        outgoingAmount = sale.amount;
+        outgoingCurrency = currs[0];
+        incomingAmount = sale.amount * sale.price;
+        incomingCurrency = currs[1];
     }
     // bid
     if (sale.orderType == OrderBookType::bidsale)
     {
-        double incomingAmount = sale.amount;
-        std::string incomingCurrency = currs[0];
-        double outgoingAmount = sale.amount * sale.price;
-        std::string outgoingCurrency = currs[1];
-
-        currencies[incomingCurrency] += incomingAmount;
-        currencies[outgoingCurrency] -= outgoingAmount;
-
-        // Add log line in the cache
-        std::string logLine = "trade," + outgoingCurrency + "," + std::to_string(outgoingAmount) + "," + incomingCurrency + "," + std::to_string(incomingAmount);
-        operatesCache.push_back(logLine);
+        incomingAmount = sale.amount;
+        incomingCurrency = currs[0];
+        outgoingAmount = sale.amount * sale.price;
+        outgoingCurrency = currs[1];
     }
+
+    currencies[incomingCurrency] += incomingAmount;
+    currencies[outgoingCurrency] -= outgoingAmount;
+
+    // Add log line in the cache
+    std::string logLine = "trade," + outgoingCurrency + "," + std::to_string(outgoingAmount) + "," + incomingCurrency + "," + std::to_string(incomingAmount);
+    operatesCache.push_back(logLine);
 }
 
 bool Wallet::canFulfillOrder(OrderBookEntry order)
