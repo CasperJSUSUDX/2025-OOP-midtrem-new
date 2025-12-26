@@ -5,7 +5,7 @@
 #include <string>
 #include <vector>
 #include <map>
-
+#include <random>
 
 class Wallet 
 {
@@ -33,14 +33,28 @@ class Wallet
         /** convert to a format that can store in CSV and read by the code */
         std::string storeInString();
 
-        /** pass a trading history to simulate the user's trading */
-        static std::vector<std::string> simulateUserTrade(unsigned int simulateTimes, std::vector<std::string> tradingHistory);
+        /** pass a trading history to analyze and call simulateUserTrade() to simulate */
+        static std::vector<std::string> analyzeAndSimulateUserTrade(unsigned int simulateTimes, std::vector<std::string> tradingHistory);
 
         void updateUserWalletCSV();
         
         std::string uuid;
     private:
         void storeOperateInCache(std::string operate, std::string type, double amount);
+
+        struct CurrencyHistory
+        {
+            double total;
+            std::vector<double> historyAmounts;
+        };
+        /** simulate a user tarde activity and return by a string */
+        static std::string simulateUserTrade(
+            std::string operate,
+            std::map<std::string, CurrencyHistory>& currenciesTable,
+            std::vector<std::string>& currencies,
+            std::vector<double>& amounts,
+            std::mt19937& gen
+        );
 
         std::vector<std::string> operatesCache;
         std::map<std::string,double> currencies;
