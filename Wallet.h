@@ -45,8 +45,6 @@ class Wallet
         
         std::string uuid;
     private:
-        void storeOperateInCache(std::string operate, std::string type, double amount);
-
         struct CurrencyHistory
         {
             double total;

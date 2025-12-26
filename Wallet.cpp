@@ -33,8 +33,11 @@ void Wallet::insertCurrency(std::string type, double amount)
         balance = currencies[type];
     }
     balance += amount; 
-    currencies[type] = balance; 
-    storeOperateInCache("insert", type, amount);
+    currencies[type] = balance;
+
+    // Add log line in the cache
+    std::string logLine = "insert," + type + "," + std::to_string(amount);
+    operatesCache.push_back(logLine);
 }
 
 bool Wallet::removeCurrency(std::string type, double amount)
@@ -53,7 +56,9 @@ bool Wallet::removeCurrency(std::string type, double amount)
         {
             //std::cout << "Removing " << type << ": " << amount << std::endl;
             currencies[type] -= amount;
-            storeOperateInCache("remove", type, amount);
+            
+            std::string logLine = "remove," + type + "," + std::to_string(amount);
+            operatesCache.push_back(logLine);
             return true;
         } 
         else // they have it but not enough.
@@ -82,9 +87,11 @@ void Wallet::processSale(OrderBookEntry& sale)
         std::string incomingCurrency = currs[1];
 
         currencies[incomingCurrency] += incomingAmount;
-        storeOperateInCache("ask", incomingCurrency, incomingAmount);
         currencies[outgoingCurrency] -= outgoingAmount;
-        storeOperateInCache("ask-sale", outgoingCurrency, outgoingAmount);
+
+        // Add log line in the cache
+        std::string logLine = "trade," + outgoingCurrency + "," + std::to_string(outgoingAmount) + "," + incomingCurrency + "," + std::to_string(incomingAmount);
+        operatesCache.push_back(logLine);
     }
     // bid
     if (sale.orderType == OrderBookType::bidsale)
@@ -95,9 +102,11 @@ void Wallet::processSale(OrderBookEntry& sale)
         std::string outgoingCurrency = currs[1];
 
         currencies[incomingCurrency] += incomingAmount;
-        storeOperateInCache("bid", incomingCurrency, incomingAmount);
         currencies[outgoingCurrency] -= outgoingAmount;
-        storeOperateInCache("bid-sale", outgoingCurrency, outgoingAmount);
+
+        // Add log line in the cache
+        std::string logLine = "trade," + outgoingCurrency + "," + std::to_string(outgoingAmount) + "," + incomingCurrency + "," + std::to_string(incomingAmount);
+        operatesCache.push_back(logLine);
     }
 }
 
@@ -124,13 +133,6 @@ bool Wallet::canFulfillOrder(OrderBookEntry order)
 
 
     return false; 
-}
-
-void Wallet::storeOperateInCache(std::string operate, std::string type, double amount)
-{
-    std::string s;
-    s = operate + ',' + type + ',' + std::to_string(amount);
-    operatesCache.push_back(s);
 }
 
 void Wallet::logInCSV()
