@@ -1,9 +1,9 @@
 #include "MerkelMain.h"
-#include <iostream>
-#include <vector>
 #include "OrderBookEntry.h"
 #include "CSVReader.h"
 #include "AccountManager.h"
+#include <iostream>
+#include <vector>
 
 MerkelMain::MerkelMain(Wallet _wallet)
 : wallet(_wallet)
@@ -21,6 +21,7 @@ void MerkelMain::init()
         printMenu();
         input = getUserOption();
 
+        cleanConsole();
         processUserOption(input);
 
         if (exitFlag)
@@ -245,4 +246,10 @@ void MerkelMain::processUserOption(int userOption)
         std::cout << "Invalid choice. Choose 1-7" << std::endl;
         break;
     }
+}
+
+void MerkelMain::cleanConsole()
+{
+    // code from https://stackoverflow.com/questions/31201631/execute-cmd-commands-using-c
+    std::system("cls");
 }

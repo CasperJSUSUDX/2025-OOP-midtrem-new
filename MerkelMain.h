@@ -23,6 +23,7 @@ class MerkelMain
         void exitApp();
         int getUserOption();
         void processUserOption(int userOption);
+        void cleanConsole();
 
         std::string currentTime;
         bool exitFlag = false;
