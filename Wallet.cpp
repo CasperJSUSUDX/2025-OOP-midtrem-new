@@ -201,7 +201,15 @@ void Wallet::showTansitionOrTradingHistory(unsigned int pieces)
         for (unsigned int i = startIndex; i < lines.size(); ++i)
         {
             std::vector<std::string> tokens = CSVReader::tokenise(lines[i], ',');
-            line = "You " + tokens[0] + " a total of " + tokens[2] + " " + tokens[1];
+            std::string action = tokens[0];
+            if (action == "incsert" || action == "remove")
+            {
+                line = "You inserted " + tokens[2] + " " + tokens[1] + ".";
+            }
+            if (action == "trade")
+            {
+                line = "You sold " + tokens[2] + " " + tokens[1] + " to get " + tokens[4] + tokens[3] + ".";
+            }
             std::cout << line << std::endl;
         }
 
@@ -220,16 +228,25 @@ void Wallet::statisticsUserActivity()
         while (std::getline(readFile, line))
         {
             std::vector<std::string> tokens = CSVReader::tokenise(line, ',');
+            std::string action = tokens[0];
 
-            if (tokens[0] == "bid-sale" || tokens[0] == "ask-sale") continue;
+            statisticMap[action] += 1;
+            if (action == "insert" || action == "remove")
+            {
+                std::string currency = tokens[1];
+                double amount = std::stod(tokens[2]);
+                statisticMap[currency] += amount;
+            }
+            if (action == "trade")
+            {
+                std::string outgoingCurrency = tokens[1];
+                double outgoingAmount = std::stod(tokens[2]);
+                std::string incomingCurrency = tokens[3];
+                double incomingAmount = std::stod(tokens[4]);
 
-            std::string operate = tokens[0];
-            std::string product = tokens[1];
-            double amount = std::stod(tokens[2]);
-            double overallAmount = statisticMap[operate];
-            double productAmount = statisticMap[product];
-            statisticMap[operate] = overallAmount + amount;
-            statisticMap[product] = productAmount + amount;
+                statisticMap[outgoingCurrency] -= outgoingAmount;
+                statisticMap[incomingCurrency] += incomingAmount;
+            }
         }
 
         // print out the statistic
@@ -251,19 +268,28 @@ std::vector<std::string> Wallet::analyzeAndSimulateUserTrade(unsigned int simula
     for (std::string& line: tradingHistory)
     {
         std::vector<std::string> tokens = CSVReader::tokenise(line, ',');
-        std::string operate = tokens[0];
-        std::string currency = tokens[1];
-        double amount = std::stod(tokens[2]);
-        double total = table[currency].total;
-        if (operate == "bid" || operate == "ask-sale")
+        std::string action = tokens[0];
+        if (action == "trade")
         {
-            table[currency].total = total - amount;
-            table[currency].historyAmounts.push_back(-amount);
-        }
-        else if (operate == "ask" || operate == "bid-sale")
-        {
-            table[currency].total = total + amount;
-            table[currency].historyAmounts.push_back(amount);
+            try
+            {
+                double outgoingAmount = std::stod(tokens[1]);
+                std::string outgoingCurrency = tokens[2];
+                double incomingAmount = std::stod(tokens[3]);
+                std::string incomingCurrency = tokens[4];
+
+                double outgoingTotalAmount = table[outgoingCurrency].total;
+                table[outgoingCurrency].total = outgoingTotalAmount - outgoingAmount;
+                table[outgoingCurrency].historyAmounts.push_back(outgoingAmount);
+
+                double incomingTotalAmount = table[incomingCurrency].total;
+                table[incomingCurrency].total = incomingTotalAmount + incomingAmount;
+                table[incomingCurrency].historyAmounts.push_back(incomingAmount);
+            }
+            catch (std::exception& e)
+            {
+                std::cerr << e.what() << std::endl;
+            }
         }
     }
 

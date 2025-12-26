@@ -59,6 +59,9 @@ class Wallet
             std::mt19937& gen
         );
 
+        // there are two format of the operate
+        // if only have input or output: {action},{currency},{amount}
+        // if have both input and output: {action},{outgoingCurrency},{outgoingAmount},{incomingCurrency},{incomingAmount}
         std::vector<std::string> operatesCache;
         std::map<std::string,double> currencies;
 
