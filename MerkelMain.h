@@ -20,6 +20,7 @@ class MerkelMain
         void enterAsk();
         void enterBid();
         void jumpToWallet();
+        void jumpToCandleStick();
         void gotoNextTimeframe();
         void exitApp();
         // wallet menu funcitons
@@ -31,8 +32,8 @@ class MerkelMain
         // drawing menu functions
         unsigned int candleStickInterval = 15;
         void printCandleStick();
-        void exitDrawingPage();
         void switchCandleStickInterval();
+        void exitDrawingPage();
         // process input functions
         int getUserOption();
         void processUserOption(int userOption);

@@ -45,11 +45,11 @@ void MerkelMain::printMenu()
     std::cout << "Current time is: " << currentTime << std::endl;
 }
 
+// Main menu
 void MerkelMain::printHelp()
 {
     std::cout << "Help - your aim is to make money. Analyse the market and make bids and offers. " << std::endl;
 }
-
 void MerkelMain::printMarketStats()
 {
     for (std::string const& p : orderBook.getKnownProducts())
@@ -62,7 +62,6 @@ void MerkelMain::printMarketStats()
         std::cout << "Min ask: " << OrderBook::getLowPrice(entries) << std::endl;
     }
 }
-
 void MerkelMain::enterAsk()
 {
     std::cout << "Make an ask - enter the amount: product,price, amount, eg  ETH/BTC,200,0.5" << std::endl;
@@ -98,7 +97,6 @@ void MerkelMain::enterAsk()
         }   
     }
 }
-
 void MerkelMain::enterBid()
 {
     std::cout << "Make an bid - enter the amount: product,price, amount, eg  ETH/BTC,200,0.5" << std::endl;
@@ -135,13 +133,17 @@ void MerkelMain::enterBid()
         }   
     }
 }
-
 void MerkelMain::jumpToWallet()
 {
     std::cout << "Switch to wallet menu." << std::endl;
     indexOfMenus = 1;
 }
-        
+void MerkelMain::jumpToCandleStick()
+{
+    std::cout << "Switch to candle stick page." << std::endl;
+    printCandleStick();
+    indexOfMenus = 2;
+}
 void MerkelMain::gotoNextTimeframe()
 {
     std::cout << "Going to next time frame. " << std::endl;
@@ -164,7 +166,6 @@ void MerkelMain::gotoNextTimeframe()
 
     currentTime = orderBook.getNextTime(currentTime);
 }
-
 void MerkelMain::exitApp()
 {
     std::cout << "See you next time." << std::endl;
@@ -173,16 +174,15 @@ void MerkelMain::exitApp()
     exitFlag = true;
 }
 
+// Wallet menu
 void MerkelMain::printCurrencies()
 {
     std::cout << wallet.toString();
 }
-
 void MerkelMain::printStatistic()
 {
     wallet.statisticsUserActivity();
 }
-
 void MerkelMain::printRecentHistory()
 {
     std::string input;
@@ -213,15 +213,46 @@ void MerkelMain::printRecentHistory()
     std::cout << "" << std::endl;
     wallet.showTansitionOrTradingHistory(num);
 }
-
 void MerkelMain::updateUserCSV()
 {
     wallet.updateUserWalletCSV();
     wallet.logInCSV();
     std::cout << "Successfully update." << std::endl;
 }
-
 void MerkelMain::exitWalletPage()
+{
+    std::cout << "Back to main menu." << std::endl;
+    indexOfMenus = 0;
+}
+
+// drawing menu
+void MerkelMain::printCandleStick()
+{
+    orderBook.summaryCandleStick(DateRange::YEARLY, "ETC/BTC", OrderBookType::ask, candleStickInterval);
+}
+void MerkelMain::switchCandleStickInterval()
+{
+    std::string input;
+    int num;
+    while (true)
+    {
+        std::cin >> input;
+
+        try
+        {
+            num = std::stoi(input);
+            break;
+        }
+        catch(std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        
+    }
+
+    candleStickInterval = 15 * ((num - 15) / 15);
+}
+void MerkelMain::exitDrawingPage()
 {
     std::cout << "Back to main menu." << std::endl;
     indexOfMenus = 0;
