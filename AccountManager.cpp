@@ -198,7 +198,7 @@ void AccountManager::updateUserCSV()
     std::ofstream accounts("accounts.csv", std::ios::trunc);
     if (accounts.is_open())
     {       
-        for (std::pair<std::string, UserInfo> pair: cache)
+        for (std::pair<const std::string, UserInfo>& pair: cache)
         {
             std::string uuid = pair.first;
             std::string username = pair.second.username;

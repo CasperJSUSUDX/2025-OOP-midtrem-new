@@ -166,7 +166,7 @@ void Wallet::updateUserWalletCSV()
     std::ofstream writeWalletTable("walletTable.csv", std::ios::trunc);
     if (writeWalletTable.is_open())
     {
-        for (std::pair<std::string, std::string> pair: table)
+        for (std::pair<const std::string, std::string>& pair: table)
         {
             std::string newLine = pair.first + ',';
             if (pair.first == uuid)
@@ -250,7 +250,7 @@ void Wallet::statisticsUserActivity()
         }
 
         // print out the statistic
-        for (std::pair<std::string, double> pair: statisticMap)
+        for (std::pair<const std::string, double>& pair: statisticMap)
         {
             std::cout << pair.first << ": " << std::to_string(pair.second) << std::endl;
         }
@@ -299,7 +299,7 @@ std::vector<std::string> Wallet::analyzeAndSimulateUserTrade(unsigned int simula
     std::vector<std::string> positve;
     std::vector<std::string> negative;
     double total = 0;
-    for (std::pair<std::string, CurrencyHistory> pair: table)
+    for (std::pair<const std::string, CurrencyHistory>& pair: table)
     {
         total += pair.second.total;
         if (pair.second.total > 0)
@@ -399,7 +399,7 @@ std::string Wallet::simulateUserTrade(
 std::string Wallet::toString()
 {
     std::string s;
-    for (std::pair<std::string,double> pair : currencies)
+    for (std::pair<const std::string,double>& pair : currencies)
     {
         std::string currency = pair.first;
         double amount = pair.second;
@@ -416,7 +416,7 @@ std::ostream& operator<<(std::ostream& os,  Wallet& wallet)
 std::string Wallet::storeInString()
 {
     std::string s;
-    for (std::pair<std::string,double> pair: currencies)
+    for (std::pair<const std::string,double>& pair: currencies)
     {
         std::string currency = pair.first;
         double amount = pair.second;
