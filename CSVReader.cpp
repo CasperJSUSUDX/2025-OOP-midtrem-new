@@ -16,19 +16,22 @@ std::vector<OrderBookEntry> CSVReader::readCSV(std::string csvFilename)
     std::string line;
     if (csvFile.is_open())
     {
+        std::cout << "Loading " << csvFilename << std::endl;
         while(std::getline(csvFile, line))
         {
-            try {
+            try
+            {
                 OrderBookEntry obe = stringsToOBE(tokenise(line, ','));
                 entries.push_back(obe);
-            }catch(const std::exception& e)
+            }
+            catch(const std::exception& e)
             {
                 std::cout << "CSVReader::readCSV bad data"  << std::endl;
             }
         }// end of while
     }    
 
-    std::cout << "CSVReader::readCSV read " << entries.size() << " entries"  << std::endl;
+    std::cout << "CSVReader::readCSV read " << entries.size() << " entries\n"  << std::endl;
     return entries; 
 }
 
