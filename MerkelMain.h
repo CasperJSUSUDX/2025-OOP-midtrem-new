@@ -28,6 +28,11 @@ class MerkelMain
         void printRecentHistory();
         void updateUserCSV();
         void exitWalletPage();
+        // drawing menu functions
+        unsigned int candleStickInterval = 15;
+        void printCandleStick();
+        void exitDrawingPage();
+        void switchCandleStickInterval();
         // process input functions
         int getUserOption();
         void processUserOption(int userOption);
@@ -54,7 +59,12 @@ class MerkelMain
                 {"Print statistic", printStatistic},
                 {"Print recent activity", printRecentHistory},
                 {"Update user history", updateUserCSV},
-                {"Exit wallet", exitWalletPage}
+                {"Exit", exitWalletPage}
+            },
+            // drawing menu
+            {
+                {"Switch candle stick interval", switchCandleStickInterval},
+                {"Exit", exitDrawingPage}
             }
         };
 
