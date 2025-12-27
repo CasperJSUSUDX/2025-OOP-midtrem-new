@@ -1,10 +1,9 @@
 #pragma once
 
-#include <vector>
 #include "OrderBookEntry.h"
 #include "OrderBook.h"
 #include "Wallet.h"
-
+#include <vector>
 
 class MerkelMain
 {
@@ -14,21 +13,52 @@ class MerkelMain
         void init();
     private: 
         void printMenu();
+        void cleanConsole();
+        // main menu functions
         void printHelp();
         void printMarketStats();
         void enterAsk();
         void enterBid();
-        void printWallet();
+        void jumpToWallet();
         void gotoNextTimeframe();
         void exitApp();
+        // wallet menu funcitons
+        void printCurrencies();
+        void printStatistic();
+        void printRecentHistory();
+        void updateUserCSV();
+        void exitWalletPage();
+        // process input functions
         int getUserOption();
         void processUserOption(int userOption);
-        void cleanConsole();
 
         std::string currentTime;
         bool exitFlag = false;
 
-//        OrderBook orderBook{"20200317.csv"};
+        unsigned int indexOfMenus = 0;
+        using voidFunc = void (MerkelMain::*)();
+        std::vector<std::vector<std::pair<std::string, voidFunc>>> menus = {
+            // main menu
+            {
+                {"Print help", printHelp},
+                {"Print exchange stats", printMarketStats},
+                {"Make an offer", enterAsk},
+                {"Make a bid", enterBid},
+                {"Check wallet", jumpToWallet},
+                {"Continue", gotoNextTimeframe},
+                {"Exit", exitApp}
+            },
+            // wallet menu
+            {
+                {"Print currencies", printCurrencies},
+                {"Print statistic", printStatistic},
+                {"Print recent activity", printRecentHistory},
+                {"Update user history", updateUserCSV},
+                {"Exit wallet", exitWalletPage}
+            }
+        };
+
+        // OrderBook orderBook{"20200317.csv"};
 	    OrderBook orderBook{"20200601.csv"};
         Wallet wallet;
 

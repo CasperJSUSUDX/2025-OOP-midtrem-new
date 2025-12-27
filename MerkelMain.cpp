@@ -24,29 +24,21 @@ void MerkelMain::init()
         cleanConsole();
         processUserOption(input);
 
-        if (exitFlag)
-        {
-            break;
-        }
+        if (exitFlag) break;
+
+        std::cout << "" << std::endl;
     }
 }
 
 void MerkelMain::printMenu()
 {
-    // 1 print help
-    std::cout << "1: Print help " << std::endl;
-    // 2 print exchange stats
-    std::cout << "2: Print exchange stats" << std::endl;
-    // 3 make an offer
-    std::cout << "3: Make an offer " << std::endl;
-    // 4 make a bid 
-    std::cout << "4: Make a bid " << std::endl;
-    // 5 print wallet
-    std::cout << "5: Print wallet " << std::endl;
-    // 6 continue   
-    std::cout << "6: Continue " << std::endl;
-    // 7 exit
-    std::cout << "7: Exit" << std::endl;
+    // print menu based on the menu vector
+    unsigned int index = 1;
+    for (std::pair<std::string, voidFunc>& pair: menus[indexOfMenus])
+    {
+        std::cout << std::to_string(index) << ": " << pair.first << std::endl;
+        ++index;
+    }
 
     std::cout << "============== " << std::endl;
 
@@ -68,26 +60,7 @@ void MerkelMain::printMarketStats()
         std::cout << "Asks seen: " << entries.size() << std::endl;
         std::cout << "Max ask: " << OrderBook::getHighPrice(entries) << std::endl;
         std::cout << "Min ask: " << OrderBook::getLowPrice(entries) << std::endl;
-
-
-
     }
-    // std::cout << "OrderBook contains :  " << orders.size() << " entries" << std::endl;
-    // unsigned int bids = 0;
-    // unsigned int asks = 0;
-    // for (OrderBookEntry& e : orders)
-    // {
-    //     if (e.orderType == OrderBookType::ask)
-    //     {
-    //         asks ++;
-    //     }
-    //     if (e.orderType == OrderBookType::bid)
-    //     {
-    //         bids ++;
-    //     }  
-    // }    
-    // std::cout << "OrderBook asks:  " << asks << " bids:" << bids << std::endl;
-
 }
 
 void MerkelMain::enterAsk()
@@ -163,9 +136,10 @@ void MerkelMain::enterBid()
     }
 }
 
-void MerkelMain::printWallet()
+void MerkelMain::jumpToWallet()
 {
-    std::cout << wallet.toString() << std::endl;
+    std::cout << "Switch to wallet menu." << std::endl;
+    indexOfMenus = 1;
 }
         
 void MerkelMain::gotoNextTimeframe()
@@ -199,11 +173,65 @@ void MerkelMain::exitApp()
     exitFlag = true;
 }
 
+void MerkelMain::printCurrencies()
+{
+    std::cout << wallet.toString();
+}
+
+void MerkelMain::printStatistic()
+{
+    wallet.statisticsUserActivity();
+}
+
+void MerkelMain::printRecentHistory()
+{
+    std::string input;
+    unsigned int num;
+    std::cout << "Please input how many to display." << std::endl;
+    while (true)
+    {
+        std::cin >> input;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        // input check
+        try
+        {
+            int n = std::stoi(input);
+            if (n > 0) 
+            {
+                num = n;
+                break;
+            }
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        std::cout << "Wrong input. Please input a number again." << std::endl;
+    }
+
+    std::cout << "" << std::endl;
+    wallet.showTansitionOrTradingHistory(num);
+}
+
+void MerkelMain::updateUserCSV()
+{
+    wallet.updateUserWalletCSV();
+    wallet.logInCSV();
+    std::cout << "Successfully update." << std::endl;
+}
+
+void MerkelMain::exitWalletPage()
+{
+    std::cout << "Back to main menu." << std::endl;
+    indexOfMenus = 0;
+}
+
 int MerkelMain::getUserOption()
 {
     int userOption = 0;
     std::string line;
-    std::cout << "Type in 1-7" << std::endl;
+    std::cout << "Type in 1-" << menus[indexOfMenus].size() << std::endl;
     std::getline(std::cin, line);
     try{
         userOption = std::stoi(line);
@@ -217,34 +245,17 @@ int MerkelMain::getUserOption()
 
 void MerkelMain::processUserOption(int userOption)
 {
-    switch (userOption)
-    {
-    case 1:
-        printHelp();
-        break;
-    case 2:
-        printMarketStats();
-        break;
-    case 3:
-        enterAsk();
-        break;
-    case 4:
-        enterBid();
-        break;
-    case 5:
-        printWallet();
-        break;
-    case 6:
-        gotoNextTimeframe();
-        break;
-    case 7:
-        exitApp();
-        break;
     // bad input
-    default:
-        std::cout << "Invalid choice. Choose 1-7" << std::endl;
-        break;
+    if (userOption <= 0 || userOption > menus[indexOfMenus].size())
+    {
+        std::cout << "Invalid choice. Choose 1-" << menus[indexOfMenus].size() << std::endl;
+        return;
     }
+
+    // Wrote by AI
+    // Prompt: How to store a function into a pair and call it
+    voidFunc functionPointer = menus[indexOfMenus][userOption - 1].second;
+    (this->*functionPointer)();
 }
 
 void MerkelMain::cleanConsole()
