@@ -105,7 +105,6 @@ std::vector<candleStickEntry> OrderBook::generateCnadleSticks(std::string startT
     std::vector<candleStickEntry> candleSticks;
     std::vector<OrderBookEntry> orders_sub;
     std::string nextTimestamp = OrderBookEntry::calcNextTimestamp(startTimestamp, timeInterval);
-    
 
     for (OrderBookEntry& obe: orders)
     {
@@ -126,8 +125,6 @@ std::vector<candleStickEntry> OrderBook::generateCnadleSticks(std::string startT
             orders_sub.clear();
             startTimestamp = OrderBookEntry::calcNextTimestamp(nextTimestamp, 5);
             nextTimestamp = OrderBookEntry::calcNextTimestamp(startTimestamp, timeInterval);
-
-            
         }
 
         if (timestamp == startTimestamp)
