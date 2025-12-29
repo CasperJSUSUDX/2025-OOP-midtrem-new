@@ -104,6 +104,7 @@ std::vector<candleStickEntry> OrderBook::generateCnadleSticks(
     std::string startTimestamp,
     std::string endTimestamp,
     unsigned int timeInterval,
+    std::string product,
     OrderBookType candleStickType
 )
 {
@@ -114,8 +115,13 @@ std::vector<candleStickEntry> OrderBook::generateCnadleSticks(
     for (OrderBookEntry& obe: orders)
     {
         std::string timestamp = obe.timestamp.substr(0, 19);
+        // filter
+        if (obe.product != product) continue;
+        if (obe.orderType != candleStickType) continue;
         if (timestamp < startTimestamp) continue;
         if (timestamp > endTimestamp) break;
+
+        // Time block check
         if (timestamp > nextTimestamp && timestamp <= endTimestamp) 
         {
             candleStickEntry cse {
@@ -130,14 +136,18 @@ std::vector<candleStickEntry> OrderBook::generateCnadleSticks(
             orders_sub.clear();
             startTimestamp = OrderBookEntry::calcNextTimestamp(nextTimestamp, 5);
             nextTimestamp = OrderBookEntry::calcNextTimestamp(startTimestamp, timeInterval);
+        
+            if (timestamp > endTimestamp) break;
         }
 
-        if (timestamp == startTimestamp && obe.orderType == candleStickType)
+        // push the obe to cache
+        if (timestamp > startTimestamp && timestamp < nextTimestamp)
         {
             orders_sub.push_back(obe);
         }
     }
 
+    // process remain obes
     if (!orders_sub.empty())
     {
         candleStickEntry cse {
