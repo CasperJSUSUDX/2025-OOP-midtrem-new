@@ -30,8 +30,10 @@ class MerkelMain
         void updateUserCSV();
         void exitWalletPage();
         // drawing menu functions
+        std::string candleStickStartTimestamp;
         unsigned int candleStickInterval = 5;
         void printCandleStick();
+        void switchCandleStickStartTimestamp();
         void switchCandleStickInterval();
         void exitDrawingPage();
         // process input functions
@@ -65,6 +67,7 @@ class MerkelMain
             },
             // drawing menu
             {
+                {"Switch candle stick start timestamp", switchCandleStickStartTimestamp},
                 {"Switch candle stick interval", switchCandleStickInterval},
                 {"Exit", exitDrawingPage}
             }

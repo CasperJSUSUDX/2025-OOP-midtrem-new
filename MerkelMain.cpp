@@ -16,6 +16,7 @@ void MerkelMain::init()
 {
     int input;
     currentTime = orderBook.getEarliestTime();
+    candleStickStartTimestamp = currentTime.substr(0, 19);
 
     while(true)
     {
@@ -231,8 +232,8 @@ void MerkelMain::printCandleStick()
 {
     // get default range of the candleSticks
     std::vector<candleStickEntry> candleSticks = orderBook.generateCnadleSticks(
-        "2020/06/01 11:57:30",
-        "2020/06/01 11:57:40",
+        candleStickStartTimestamp,
+        currentTime.substr(0, 19),
         candleStickInterval
     );
 
@@ -240,7 +241,44 @@ void MerkelMain::printCandleStick()
 
     // generate a candleStick vector by orderbook
     CandleStick::printCandleStick(candleSticks);
-    
+}
+void MerkelMain::switchCandleStickStartTimestamp()
+{
+    std::string timestamp;
+    std::cout << "Input a timestamp to set it as the start timestamp of the candle stick. (Format: YYYY/MM/DD HH:MM:SS)" << std::endl;
+    while (true)
+    {
+        std::cin >> timestamp;
+        
+        try
+        {
+            timestamp = timestamp.substr(0, 19);
+            std::string day = timestamp.substr(0, 10);
+            std::string time = timestamp.substr(11, 8);
+
+            std::vector<std::string> tokens = CSVReader::tokenise(day, '/');
+            if (tokens[0].length() != 4) throw;
+            if (tokens[1].length() != 2) throw;
+            if (tokens[2].length() != 2) throw;
+            tokens.clear();
+            
+            tokens = CSVReader::tokenise(time, ':');
+            if (tokens.size() != 3) throw;
+            if (tokens[0].length() != 2 || tokens[1].length() != 2 || tokens[2].length() != 2) throw;
+
+            break;
+        }
+        catch(const std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+
+        std::cout << "Bad input. Please try again. (Format: YYYY/MM/DD HH:MM:SS)" << std::endl;
+    }
+
+    candleStickStartTimestamp = timestamp;
+    std::cout << "Change successfuly. Current start timestamp is: " << timestamp << "\n" << std::endl;
+    printCandleStick();
 }
 void MerkelMain::switchCandleStickInterval()
 {
@@ -265,6 +303,8 @@ void MerkelMain::switchCandleStickInterval()
     }
 
     candleStickInterval = num - (num % 5);
+    std::cout << "Change successfuly. Current interval is: " << candleStickInterval << "\n" << std::endl;
+    printCandleStick();
 }
 void MerkelMain::exitDrawingPage()
 {
