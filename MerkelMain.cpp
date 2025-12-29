@@ -229,25 +229,7 @@ void MerkelMain::exitWalletPage()
 // Candle stick menu
 void MerkelMain::printCandleStick()
 {
-    // orderBook.summaryCandleStick(DateRange::YEARLY, "ETC/BTC", OrderBookType::ask, candleStickInterval);
-    // candleStickEntry a {
-    //     "2025",
-    //     "2026",
-    //     100,
-    //     150,
-    //     50,
-    //     120
-    // };
-    // candleStickEntry b {
-    //     "2026",
-    //     "2027",
-    //     100,
-    //     150,
-    //     50,
-    //     80
-    // };
-
-    // std::vector<candleStickEntry> candleSticks = { a, b };
+    // get default range of the candleSticks
     std::vector<candleStickEntry> candleSticks = orderBook.generateCnadleSticks(
         "2020/06/01 11:57:30",
         "2020/06/01 11:57:40",
@@ -264,6 +246,7 @@ void MerkelMain::switchCandleStickInterval()
 {
     std::string input;
     int num;
+    std::cout << "Input a new timestamp interval of the candleStick. (Will floor to multiples of five)" << std::endl;
     while (true)
     {
         std::cin >> input;
@@ -278,9 +261,10 @@ void MerkelMain::switchCandleStickInterval()
             std::cerr << e.what() << '\n';
         }
         
+        std::cout << "Please input a positive integer." << std::endl;
     }
 
-    candleStickInterval = 15 * ((num - 15) / 15);
+    candleStickInterval = num - (num % 5);
 }
 void MerkelMain::exitDrawingPage()
 {
