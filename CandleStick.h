@@ -30,7 +30,7 @@ class CandleStick
 {
     public:
         CandleStick(std::string _date, double _open, double _high, double _low, double _close);
-        void drawCandleStick(std::vector<candleStickEntry> candleSticks);
+        void printCandleStick(std::vector<candleStickEntry> candleSticks);
         std::string getDate(DateRange dateRange);
         void print();
 

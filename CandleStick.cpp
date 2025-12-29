@@ -18,17 +18,22 @@ CandleStick::CandleStick(
 
 }
 
-void CandleStick::drawCandleStick(std::vector<candleStickEntry> candleSticks)
+void CandleStick::printCandleStick(std::vector<candleStickEntry> candleSticks)
 {
     unsigned int height = 20;
     unsigned int width = 60;
     canvas canvas = createCanvas(height, width);
     
     drawText(canvas, height - 1, 0, "test");
-    // for (candleStickEntry& cse: candleSticks)
-    // {
+    for (candleStickEntry& cse: candleSticks)
+    {
+        // up day
+        if (cse.close >= cse.open) std::cout;
+        std::cout << cse.startTimestamp << " --> " << cse.endTimestamp << std::endl;
         
-    // }
+
+        std::cout << "===============" << std::endl;
+    }
 }
 
 void CandleStick::drawPixel(canvas& canvas, unsigned int x, unsigned int y, char c)
