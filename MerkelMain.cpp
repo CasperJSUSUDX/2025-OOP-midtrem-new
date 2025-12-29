@@ -177,6 +177,68 @@ void MerkelMain::exitApp()
 }
 
 // Wallet menu
+void MerkelMain::dopsiteToWallet()
+{
+    std::string currency;
+    std::string amountString;
+    double amount;
+    std::cout << "Deposite currency" << std::endl;
+    while (true)
+    {
+        std::cout << "Currency: " << std::flush;
+        std::cin >> currency;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Amount: " << std::flush;
+        std::cin >> amountString;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        try
+        {
+            amount = std::stod(amountString);
+            break;
+        }
+        catch(std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        
+        std::cout << "Bad input. Please try again." << std::endl;
+    }
+
+    wallet.insertCurrency(currency, amount);
+    std::cout << "Deposite successfuly\n" << std::endl;
+}
+void MerkelMain::withdrawFromWallet()
+{
+    std::string currency;
+    std::string amountString;
+    double amount;
+    std::cout << "Withdraw currency" << std::endl;
+    while (true)
+    {
+        std::cout << "Currency: " << std::flush;
+        std::cin >> currency;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        std::cout << "Amount: " << std::flush;
+        std::cin >> amountString;
+        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        try
+        {
+            amount = std::stod(amountString);
+            break;
+        }
+        catch(std::exception& e)
+        {
+            std::cerr << e.what() << '\n';
+        }
+        
+        std::cout << "Bad input. Please try again." << std::endl;
+    }
+
+    wallet.removeCurrency(currency, amount);
+    std::cout << "Withdraw successfuly\n" << std::endl;
+}
 void MerkelMain::printCurrencies()
 {
     std::cout << wallet.toString();

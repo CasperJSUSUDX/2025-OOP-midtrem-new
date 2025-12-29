@@ -24,6 +24,8 @@ class MerkelMain
         void gotoNextTimeframe();
         void exitApp();
         // wallet menu funcitons
+        void dopsiteToWallet();
+        void withdrawFromWallet();
         void printCurrencies();
         void printStatistic();
         void printRecentHistory();
@@ -61,6 +63,8 @@ class MerkelMain
             },
             // wallet menu
             {
+                {"Deposit", dopsiteToWallet},
+                {"Withdraw", withdrawFromWallet},
                 {"Print currencies", printCurrencies},
                 {"Print statistic", printStatistic},
                 {"Print recent activity", printRecentHistory},
