@@ -19,6 +19,7 @@ class MerkelMain
         void printMarketStats();
         void enterAsk();
         void enterBid();
+        void simulateUserTrade();
         void jumpToWallet();
         void jumpToCandleStick();
         void gotoNextTimeframe();
@@ -45,10 +46,13 @@ class MerkelMain
         // process input functions
         int getUserOption();
         void processUserOption(int userOption);
+        
+        std::string getCurrentSystemTimestamp();
 
         std::string currentTime;
         bool exitFlag = false;
 
+        // menu variables
         unsigned int indexOfMenus = 0;
         using voidFunc = void (MerkelMain::*)();
         std::vector<std::vector<std::pair<std::string, voidFunc>>> menus = {
@@ -58,6 +62,7 @@ class MerkelMain
                 {"Print exchange stats", printMarketStats},
                 {"Make an offer", enterAsk},
                 {"Make a bid", enterBid},
+                {"Simulate user trading", simulateUserTrade},
                 {"Check wallet", jumpToWallet},
                 {"Show candle stick", jumpToCandleStick},
                 {"Continue", gotoNextTimeframe},

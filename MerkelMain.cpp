@@ -3,6 +3,7 @@
 #include "CSVReader.h"
 #include "AccountManager.h"
 #include "CandleStick.h"
+#include <ctime>
 #include <iostream>
 #include <vector>
 
@@ -17,6 +18,7 @@ void MerkelMain::init()
     int input;
     currentTime = orderBook.getEarliestTime();
     candleStickStartTimestamp = currentTime.substr(0, 19);
+    getCurrentSystemTimestamp();
 
     while(true)
     {
@@ -134,6 +136,10 @@ void MerkelMain::enterBid()
             std::cout << " MerkelMain::enterBid Bad input " << std::endl;
         }   
     }
+}
+void MerkelMain::simulateUserTrade()
+{
+
 }
 void MerkelMain::jumpToWallet()
 {
@@ -465,4 +471,25 @@ void MerkelMain::cleanConsole()
 {
     // code from https://stackoverflow.com/questions/31201631/execute-cmd-commands-using-c
     std::system("cls");
+}
+
+std::string MerkelMain::getCurrentSystemTimestamp()
+{
+    std::time_t t = std::time(0);
+    std::tm* now = std::localtime(&t);
+    std::string timestamp = std::to_string(now->tm_year + 1900) + '/' +
+                            std::to_string(now->tm_mon + 1) + '/' +
+                            std::to_string(now->tm_mday) + ' ';
+
+    std::string hour = std::to_string(now->tm_hour);
+    std::string min = std::to_string(now->tm_min);
+    std::string sec = std::to_string(now->tm_sec);
+    if (hour.length() < 2) hour = "0" + hour;
+    if (min.length() < 2) min = "0" + min;
+    if (sec.length() < 2) sec = "0" + sec;
+
+    timestamp += hour + ':' + min + ':' + sec;
+    std::cout << timestamp << std::endl;
+
+    return timestamp;
 }
