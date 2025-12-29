@@ -3,89 +3,37 @@
 #include <iostream>
 #include <vector>
 
-CandleStick::CandleStick(
-    std::string _date,
-    double _open,
-    double _high,
-    double _low,
-    double _close)
-: date(_date),
-  open(_open),
-  high(_high),
-  low(_low),
-  close(_close)
+CandleStick::CandleStick()
 {
-
 }
 
 void CandleStick::printCandleStick(std::vector<candleStickEntry> candleSticks)
-{
-    unsigned int height = 20;
-    unsigned int width = 60;
-    canvas canvas = createCanvas(height, width);
-    
-    drawText(canvas, height - 1, 0, "test");
+{   
     for (candleStickEntry& cse: candleSticks)
     {
+        std::cout << cse.startTimestamp << " --> " << cse.endTimestamp << "\n" << std::endl;
+
         // up day
-        if (cse.close >= cse.open) std::cout;
-        std::cout << cse.startTimestamp << " --> " << cse.endTimestamp << std::endl;
-        
+        if (cse.close >= cse.open) 
+        {
+            std::cout << "\033[32m";
+            std::cout << "High: " << cse.high << std::endl;
+            std::cout << "Close: " << cse.close << std::endl;
+            std::cout << "Open: " << cse.open << std::endl;
+            std::cout << "Low: " << cse.low << std::endl;
+        }
+        // down day
+        if (cse.close < cse.open) 
+        {
+            std::cout << "\033[31m";
+            std::cout << "High: " << cse.high << std::endl;
+            std::cout << "Open: " << cse.open << std::endl;
+            std::cout << "Close: " << cse.close << std::endl;
+            std::cout << "Low: " << cse.low << std::endl;
+        }
 
-        std::cout << "===============" << std::endl;
-    }
-}
-
-void CandleStick::drawPixel(canvas& canvas, unsigned int x, unsigned int y, char c)
-{
-    // input check
-    if (y > canvas.size()) return;
-    if (x > canvas[y].size()) return;
-
-    canvas[y][x] = c;
-}
-
-void CandleStick::drawText(canvas& canvas, unsigned int x, unsigned int y, std::string s)
-{
-    // input check
-    if (y > canvas.size()) return;
-    if (x > canvas[y].size()) return;
-
-    canvas[y].replace(x, s.length(), s);
-}
-
-canvas CandleStick::createCanvas(unsigned int height, unsigned int width)
-{
-    canvas canvas;
-    for (int i = 0; i < height; ++i)
-    {
-        std::string row(width, ' ');
-        canvas.push_back(row);
-    }
-}
-
-void CandleStick::print()
-{
-    std::cout << "Current time: " << date << std::endl;
-    std::cout << "Open: " << open << std::endl;
-    std::cout << "High: " << high << std::endl;
-    std::cout << "Low: " << low << std::endl;
-    std::cout << "Close: " << close << std::endl;
-    std::cout << "===================" << std::endl;
-}
-
-std::string CandleStick::getDate(DateRange dateRange)
-{
-    std::vector<std::string> dates = CSVReader::tokenise(date, '/');
-    switch (dateRange)
-    {
-    case DateRange::YEARLY:
-        return date.substr(0, 4);
-    case DateRange::MONTHLY:
-        return date.substr(0, 7);
-    case DateRange::DAILY:
-        return date.substr(0, 10);
-    default:
-        return date.substr(0, 4);
+        // stop color text
+        std::cout << "\033[0m";
+        std::cout << "==============\n" << std::endl;
     }
 }
