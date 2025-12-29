@@ -122,26 +122,30 @@ std::vector<candleStickEntry> OrderBook::generateCnadleSticks(
         if (timestamp > endTimestamp) break;
 
         // Time block check
-        if (timestamp > nextTimestamp && timestamp <= endTimestamp) 
+        while (timestamp >= nextTimestamp)
         {
-            candleStickEntry cse {
-                startTimestamp,
-                nextTimestamp,
-                orders_sub[0].price,
-                OrderBook::getHighPrice(orders_sub),
-                OrderBook::getLowPrice(orders_sub),
-                orders_sub[orders_sub.size()-1].price
-            };
-            candleSticks.push_back(cse);
-            orders_sub.clear();
-            startTimestamp = OrderBookEntry::calcNextTimestamp(nextTimestamp, 5);
+            if (!orders_sub.empty())
+            {
+                candleStickEntry cse {
+                    startTimestamp,
+                    nextTimestamp,
+                    orders_sub[0].price,
+                    OrderBook::getHighPrice(orders_sub),
+                    OrderBook::getLowPrice(orders_sub),
+                    orders_sub.back().price
+                };
+                candleSticks.push_back(cse);
+                orders_sub.clear();
+            }
+
+            startTimestamp = nextTimestamp;
             nextTimestamp = OrderBookEntry::calcNextTimestamp(startTimestamp, timeInterval);
-        
+
             if (timestamp > endTimestamp) break;
         }
 
         // push the obe to cache
-        if (timestamp > startTimestamp && timestamp < nextTimestamp)
+        if (timestamp >= startTimestamp && timestamp < nextTimestamp)
         {
             orders_sub.push_back(obe);
         }
