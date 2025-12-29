@@ -32,10 +32,12 @@ class MerkelMain
         void updateUserCSV();
         void exitWalletPage();
         // drawing menu functions
+        std::string candleStickProduct = "ETH/BTC";
         std::string candleStickStartTimestamp;
         OrderBookType candleStickType = OrderBookType::ask;
         unsigned int candleStickInterval = 5;
         void printCandleStick();
+        void switchCandleStickProduct();
         void switchCandleStickType();
         void switchCandleStickStartTimestamp();
         void switchCandleStickInterval();
@@ -73,6 +75,7 @@ class MerkelMain
             },
             // drawing menu
             {
+                {"Switch candle stick product", switchCandleStickProduct},
                 {"Switch candle stick type", switchCandleStickType},
                 {"Switch candle stick start timestamp", switchCandleStickStartTimestamp},
                 {"Switch candle stick interval", switchCandleStickInterval},

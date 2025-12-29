@@ -187,7 +187,6 @@ void MerkelMain::dopsiteToWallet()
     {
         std::cout << "Currency: " << std::flush;
         std::cin >> currency;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << "Amount: " << std::flush;
         std::cin >> amountString;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -206,7 +205,7 @@ void MerkelMain::dopsiteToWallet()
     }
 
     wallet.insertCurrency(currency, amount);
-    std::cout << "Deposite successfuly\n" << std::endl;
+    std::cout << "Deposite successfuly" << std::endl;
 }
 void MerkelMain::withdrawFromWallet()
 {
@@ -218,7 +217,6 @@ void MerkelMain::withdrawFromWallet()
     {
         std::cout << "Currency: " << std::flush;
         std::cin >> currency;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
         std::cout << "Amount: " << std::flush;
         std::cin >> amountString;
         std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
@@ -237,7 +235,7 @@ void MerkelMain::withdrawFromWallet()
     }
 
     wallet.removeCurrency(currency, amount);
-    std::cout << "Withdraw successfuly\n" << std::endl;
+    std::cout << "Withdraw successfuly" << std::endl;
 }
 void MerkelMain::printCurrencies()
 {
@@ -292,11 +290,11 @@ void MerkelMain::exitWalletPage()
 // Candle stick menu
 void MerkelMain::printCandleStick()
 {
-    // get default range of the candleSticks
     std::vector<candleStickEntry> candleSticks = orderBook.generateCnadleSticks(
         candleStickStartTimestamp,
         currentTime.substr(0, 19),
         candleStickInterval,
+        candleStickProduct,
         candleStickType
     );
 
@@ -305,11 +303,23 @@ void MerkelMain::printCandleStick()
     // generate a candleStick vector by orderbook
     CandleStick::printCandleStick(candleSticks);
 }
+void MerkelMain::switchCandleStickProduct()
+{
+    std::string product;
+    std::cout << "Enter product. (ETH/BTC)" << std::endl;
+    std::cout << "Product: ";
+    std::cin >> product;
+
+    candleStickProduct = product;
+    std::cout << "Change successfully. Current product is: " << product << std::endl;
+    
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+}
 void MerkelMain::switchCandleStickType()
 {
     std::string type;
     OrderBookType obType;
-    std::cout << "Input a order type to set type of the candle stick. (ask or bid)" << std::endl;
+    std::cout << "Enter a order type to set type of the candle stick. (ask or bid)" << std::endl;
     while (true)
     {
         std::cin >> type;
@@ -337,7 +347,7 @@ void MerkelMain::switchCandleStickType()
 void MerkelMain::switchCandleStickStartTimestamp()
 {
     std::string timestamp;
-    std::cout << "Input a timestamp to set it as the start timestamp of the candle stick. (Format: YYYY/MM/DD HH:MM:SS)" << std::endl;
+    std::cout << "Enter a timestamp to set it as the start timestamp of the candle stick. (Format: YYYY/MM/DD HH:MM:SS)" << std::endl;
     while (true)
     {
         std::cin >> timestamp;
@@ -377,7 +387,7 @@ void MerkelMain::switchCandleStickInterval()
 {
     std::string input;
     int num;
-    std::cout << "Input a new timestamp interval of the candleStick. (Will floor to multiples of five)" << std::endl;
+    std::cout << "Enter a new timestamp interval of the candleStick. (Will floor to multiples of five)" << std::endl;
     while (true)
     {
         std::cin >> input;
@@ -392,7 +402,7 @@ void MerkelMain::switchCandleStickInterval()
             std::cerr << e.what() << '\n';
         }
         
-        std::cout << "Please input a positive integer." << std::endl;
+        std::cout << "Please enter a positive integer." << std::endl;
     }
 
     candleStickInterval = num - (num % 5);
