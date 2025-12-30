@@ -56,7 +56,7 @@ class MerkelMain
         std::string currentTime;
         bool exitFlag = false;
         unsigned int simulateTimes = 5;
-        bool debug = false;
+        bool debug = true;
 
         // menu variables
         // Made by myself - start
