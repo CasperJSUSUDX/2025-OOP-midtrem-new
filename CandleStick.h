@@ -20,11 +20,5 @@ class Candlestick
         Candlestick();
         /** print out a list of candle stick information by the input vector */
         static void printCandlestick(std::vector<candlestickEntry> candlesticks);
-
-        std::string date;
-        double open;
-        double high;
-        double low;
-        double close;
 };
 // Made by myself - end
