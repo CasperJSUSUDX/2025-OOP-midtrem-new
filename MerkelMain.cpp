@@ -143,6 +143,7 @@ void MerkelMain::simulateTrade()
     std::cout << "Simulating trade..." << std::endl;
     std::string systemTimestamp = getCurrentSystemTimestamp();
     std::vector<std::string> products = orderBook.getKnownProducts();
+    std::vector<OrderBookEntry> simulateOBES;
 
     // Add randomness
     std::random_device rd;
@@ -210,9 +211,11 @@ void MerkelMain::simulateTrade()
                 amount,
                 systemTimestamp,
                 p,
-                OrderBookType::ask
+                OrderBookType::ask,
+                "simuser"
             };
 
+            simulateOBES.push_back(obe);
             orderBook.appendOrder(obe);
         }
 
@@ -229,14 +232,29 @@ void MerkelMain::simulateTrade()
                 amount,
                 systemTimestamp,
                 p,
-                OrderBookType::bid
+                OrderBookType::bid,
+                "simuser"
             };
 
+            simulateOBES.push_back(obe);
             orderBook.appendOrder(obe);
         }
     }
     orderBook.sortOrder();
     std::cout << "Simulate successfully." << std::endl;
+    if (debug)
+    {
+        for (OrderBookEntry& obe: simulateOBES)
+        {
+            std::cout << "Timestamp: " << obe.timestamp << std::endl;
+            if (obe.orderType == OrderBookType::bid) std::cout << "Type: bid" << std::endl;
+            if (obe.orderType == OrderBookType::ask) std::cout << "Type: ask" << std::endl;
+            std::cout << "Product" << obe.product << std::endl;
+            std::cout << "Amount: " << obe.amount << std::endl;
+            std::cout << "Price: " << obe.price << std::endl;
+        }
+    }
+        
 }
 void MerkelMain::jumpToWallet()
 {

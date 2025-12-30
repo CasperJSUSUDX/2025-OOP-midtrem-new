@@ -52,6 +52,7 @@ class MerkelMain
         std::string currentTime;
         bool exitFlag = false;
         unsigned int simulateTimes = 5;
+        bool debug = false;
 
         // menu variables
         unsigned int indexOfMenus = 0;
