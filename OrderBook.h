@@ -38,7 +38,7 @@ class OrderBook
         static double getLowPrice(std::vector<OrderBookEntry>& orders);
 
         /** generate a vector includes candlestickEntry between two gave timestamp */
-        std::vector<candlestickEntry> generateCnadleSticks(
+        std::vector<candlestickEntry> generateCandlesticks(
             std::string startTimestamp,
             std::string endTimestamp,
             unsigned int timeInterval,

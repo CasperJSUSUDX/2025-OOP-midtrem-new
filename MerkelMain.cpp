@@ -416,7 +416,7 @@ void MerkelMain::exitWalletPage()
 // Candle stick menu
 void MerkelMain::printCandlestick()
 {
-    std::vector<candlestickEntry> candlesticks = orderBook.generateCnadleSticks(
+    std::vector<candlestickEntry> candlesticks = orderBook.generateCandlesticks(
         candlestickStartTimestamp,
         currentTime.substr(0, 19),
         candlestickInterval,

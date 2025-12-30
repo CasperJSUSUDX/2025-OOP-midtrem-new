@@ -110,7 +110,7 @@ void OrderBook::sortOrder()
     std::sort(orders.begin(), orders.end(), OrderBookEntry::compareByTimestamp);
 }
 
-std::vector<candlestickEntry> OrderBook::generateCnadleSticks(
+std::vector<candlestickEntry> OrderBook::generateCandlesticks(
     std::string startTimestamp,
     std::string endTimestamp,
     unsigned int timeInterval,
