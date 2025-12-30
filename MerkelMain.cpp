@@ -301,7 +301,12 @@ void MerkelMain::dopsiteToWallet()
             std::vector<std::string> existProducts = orderBook.getKnownProducts();
             for (std::string p: existProducts)
             {
-                if (p == currency) find = true;
+                std::vector<std::string> tokens = CSVReader::tokenise(p, '/');
+                if (p == tokens[0] || p == tokens[1]) 
+                {
+                    find = true;
+                    break;
+                }
             }
             amount = std::stod(amountString);
             if (find) break;
@@ -337,7 +342,12 @@ void MerkelMain::withdrawFromWallet()
             std::vector<std::string> existProducts = orderBook.getKnownProducts();
             for (std::string p: existProducts)
             {
-                if (p == currency) find = true;
+                std::vector<std::string> tokens = CSVReader::tokenise(p, '/');
+                if (p == tokens[0] || p == tokens[1]) 
+                {
+                    find = true;
+                    break;
+                }
             }
             amount = std::stod(amountString);
             if (find) break;
